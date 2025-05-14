@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Single Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Single Player Mode</h1>
+    <form method="POST">
+        <p>{{ question['question'] }}</p>
+        <input type="hidden" name="question_id" value="{{ question['id'] }}">
+        <input type="hidden" name="start_time" value="{{ start_time }}">
+        <input type="radio" name="answer" value="{{ question['option1'] }}"> {{ question['option1'] }}<br>
+        <input type="radio" name="answer" value="{{ question['option2'] }}"> {{ question['option2'] }}<br>
+        <input type="radio" name="answer" value="{{ question['option3'] }}"> {{ question['option3'] }}<br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="result" style="display:none;">
+        <p id="correctness"></p>
+        <p id="reference"></p>
+        <p id="time-taken"></p>
+        <button id="next-question">Next Question</button>
+    </div>
+
+    <script>
+        document.querySelector('form').onsubmit = async function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('correctness').textContent = result.correct ? 'Correct!' : 'Incorrect!';
+            document.getElementById('reference').textContent = 'Reference: ' + result.reference;
+            document.getElementById('time-taken').textContent = 'Time Taken: ' + result.time_taken.toFixed(2) + ' seconds';
+        };
+
+        document.getElementById('next-question').onclick = function() {
+            location.reload();
+        };
+    </script>
+</body>
+</html>

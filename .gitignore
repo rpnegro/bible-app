@@ -1,0 +1,15 @@
+# Exclude virtual environment
+venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# SQLite database
+*.db
+
+# Logs
+*.log
+
+# macOS specific files
+.DS_Store
